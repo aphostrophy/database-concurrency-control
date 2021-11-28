@@ -26,7 +26,7 @@ class TxnProcessor():
     listener = Thread(target=self.listener, args=())
     listener.start()
     while(len(self.txnQueue)!=0):
-      tn = self.txnQueue.pop()
+      tn = self.txnQueue.pop(0)
       tn_executor = TransactionExecutor(self.conn, self.db, tn, self.messageQueue, self.t_num)
       self.t_num += 1
       t = Thread(target=tn_executor.execute_concurrent, args=())

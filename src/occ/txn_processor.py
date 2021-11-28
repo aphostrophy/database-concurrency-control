@@ -1,5 +1,6 @@
 from typing import Dict, List
 from threading import Thread, get_ident
+from time import sleep
 
 from occ.typings.transaction import Transaction
 from occ.database import Database, DatabaseCacheExecutorWrapper
@@ -25,9 +26,9 @@ class TxnProcessor:
     for t in self.pendingTxn:
       t.join()
 
-    self.restart()
+    self.clear()
 
-  def restart(self):
+  def clear(self):
     self.txnQueue = []
     self.pendingTxn = []
 

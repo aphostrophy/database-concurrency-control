@@ -73,7 +73,7 @@ class TransactionExecutor():
       self.commit()
     except AssertionError:
       while(len(self.locks)>0):
-        resource_name = self.locks.pop()
+        resource_name = self.locks.pop(0)
         request = {"message": RELEASE, "transaction_number": self.transaction_number, "resource_name": resource_name}
         self.conn.send(request)
       print(f'{self.transaction_number} is aborted')
@@ -96,7 +96,7 @@ class TransactionExecutor():
             if(message['message'] == ACQUIRE):
               assert 'resource_name' in message
               self.locks.append(message['resource_name'])
-              self.messageQueue[self.transaction_number].pop()
+              self.messageQueue[self.transaction_number].pop(0)
               self.write(message['resource_name'],val)
               return None
       except AssertionError:
@@ -120,7 +120,7 @@ class TransactionExecutor():
             if(message['message'] == ACQUIRE):
               assert 'resource_name' in message
               self.locks.append(message['resource_name'])
-              self.messageQueue[self.transaction_number].pop()
+              self.messageQueue[self.transaction_number].pop(0)
               return self.read(message['resource_name'])
       except AssertionError:
         self.abort()
@@ -130,8 +130,9 @@ class TransactionExecutor():
     assert False
   
   def commit(self) -> None:
+    print(f'Transaction {self.transaction_number} commit')
     while(len(self.locks)>0):
-      resource_name = self.locks.pop()
+      resource_name = self.locks.pop(0)
       request = {"message": RELEASE, "transaction_number": self.transaction_number, "resource_name": resource_name}
       self.conn.send(request)
 

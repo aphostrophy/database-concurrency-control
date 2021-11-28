@@ -17,7 +17,7 @@ class TxnProcessor:
   
   def execute(self) -> None: 
     while(len(self.txnQueue)!=0):
-      tn = self.txnQueue.pop()
+      tn = self.txnQueue.pop(0)
       tn_executor = self.db.get_executor(tn)
       t = Thread(target=tn_executor.execute_concurrent, args=())
       self.pendingTxn.append(t)

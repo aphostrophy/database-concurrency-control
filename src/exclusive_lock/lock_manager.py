@@ -23,7 +23,7 @@ class LockManager():
   
   def _release_lock(self, resource_name: str, transaction_number: int) -> None:
     assert(self.lock_table[resource_name][0]==transaction_number)
-    self.lock_table[resource_name].pop()
+    self.lock_table[resource_name].pop(0)
     print(f'Transaction {transaction_number} UL {resource_name}')
     if(len(self.lock_table[resource_name]) > 0):
       next_transaction_number = self.lock_table[resource_name][0]

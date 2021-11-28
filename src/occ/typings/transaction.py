@@ -1,4 +1,6 @@
-from typing import Callable
+from typing import Callable, List
 from ..database import DatabaseCacheExecutorWrapper
 
-Transaction = Callable[[DatabaseCacheExecutorWrapper], None]
+Operation = Callable[[DatabaseCacheExecutorWrapper], None]
+
+Transaction = List[Operation]

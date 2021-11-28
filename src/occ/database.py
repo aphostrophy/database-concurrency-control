@@ -59,7 +59,7 @@ class DatabaseCacheExecutorWrapper:
       return self.db.read(key)
 
   def commit(self) -> None:
-    for key, value in self.cache._data():
+    for key, value in self.cache._data().items():
       self.db.write(key, value)
 
   def get_write_set(self) -> Set[str]:

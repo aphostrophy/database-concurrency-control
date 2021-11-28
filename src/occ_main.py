@@ -1,5 +1,5 @@
 from typing import List
-from occ.database import DatabaseCacheExecutorWrapper, Database
+from occ.database import DatabaseCacheExecutorWrapper
 from occ.txn_processor import SerialDatabase
 from occ.typings.transaction import Transaction
 

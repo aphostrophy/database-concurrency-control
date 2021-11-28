@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from occ.typings.transaction import Transaction
 
-from database import Database, DatabaseCacheExecutorWrapper
+from occ.database import Database, DatabaseCacheExecutorWrapper
 
 class SerialTransactionExecutor:
   def __init__(self, db: 'SerialDatabase' , txn: Transaction) -> None:

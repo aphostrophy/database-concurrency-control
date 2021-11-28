@@ -1,8 +1,9 @@
 from typing import Dict, List
 from threading import Thread, get_ident
-from occ.typings.transaction import Transaction, Operation
 
+from occ.typings.transaction import Transaction, Operation
 from occ.database import Database, DatabaseCacheExecutorWrapper
+from utils.mutex import Mutex
 
 class TxnProcessor:
   def __init__(self, db: 'SerialDatabase') -> None:
@@ -27,6 +28,7 @@ class TxnProcessor:
   def restart(self):
     self.txnQueue = []
     self.pendingTxn = []
+    print('TxnProcessor Refreshed')
 
 class SerialTransactionExecutor:
   def __init__(self, db: 'SerialDatabase' , txn: Transaction) -> None:
@@ -77,13 +79,19 @@ class SerialDatabase(Database):
     return self.transactions[tn]
 
   def _increment_tsc(self) -> None:
+    Mutex.acquire()
     self.tsc += 1
+    Mutex.release()
 
   def _commit_transaction(self,db: DatabaseCacheExecutorWrapper) -> None:
+    Mutex.acquire()
+
     self.tsc += 1
     assert self.tsc not in self.transactions
     self.transactions[self.tsc] = db
     db.commit()
+    
+    Mutex.release()
 
   def get_executor(self, txn: Transaction) -> SerialTransactionExecutor:
     return SerialTransactionExecutor(self, txn)

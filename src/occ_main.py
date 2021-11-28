@@ -1,8 +1,6 @@
-from typing import List, Any
 from occ.database import DatabaseCacheExecutorWrapper
 from occ.txn_processor import SerialDatabase, TxnProcessor
 from occ.typings.transaction import Transaction
-from time import sleep
 
 def main():
   def init() -> Transaction:

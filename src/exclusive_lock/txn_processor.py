@@ -70,6 +70,7 @@ class TransactionExecutor():
     self.messageQueue[self.transaction_number] = []
     try:
       self.txn(self)
+      self.commit()
     except AssertionError:
       while(len(self.locks)>0):
         resource_name = self.locks.pop()

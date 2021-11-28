@@ -55,10 +55,10 @@ def main():
   txn_processor.enqueue_transaction(init_db)
   txn_processor.start()
 
+  sleep(1)
+
   lock_manager_process = multiprocessing.Process(target=lock_manager.start, args=())
   lock_manager_process.start()
-
-  sleep(1)
 
   t_1 = transactionOne()
   t_1_A = transactionOneA()
@@ -67,7 +67,7 @@ def main():
 
   txn_processor.enqueue_transaction(t_1)
   txn_processor.enqueue_transaction(t_1_A)
-  txn_processor.enqueue_transaction(t_2)
+  txn_processor.enqueue_transaction(t_1_B)
   txn_processor.start()
 
 if __name__ == '__main__':

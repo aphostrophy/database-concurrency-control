@@ -26,7 +26,7 @@ class LockManager():
     self.lock_table[resource_name].pop()
     print(f'Transaction {transaction_number} UL {resource_name}')
     if(len(self.lock_table[resource_name]) > 0):
-      next_transaction_number = self.lock_table[resource_name]
+      next_transaction_number = self.lock_table[resource_name][0]
       print(f'Transaction {next_transaction_number} XL {resource_name}')
       response = {"message" : ACQUIRE, "transaction_number" : next_transaction_number, "resource_name": resource_name}
       self.conn.send(response)

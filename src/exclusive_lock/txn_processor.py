@@ -3,7 +3,7 @@ from threading import Thread, get_ident
 from typing import List, Any, Callable, Dict
 from time import sleep, time
 from exclusive_lock.database import Database
-from exclusive_lock.messages import ACQUIRE, RELEASE, TERMINATE
+from exclusive_lock.messages import ACQUIRE, RELEASE, TERMINATE, ABORT
 from utils.mutex import Mutex
 
 TIME_LIMIT = 3
@@ -72,10 +72,8 @@ class TransactionExecutor():
       self.txn(self)
       self.commit()
     except AssertionError:
-      while(len(self.locks)>0):
-        resource_name = self.locks.pop(0)
-        request = {"message": RELEASE, "transaction_number": self.transaction_number, "resource_name": resource_name}
-        self.conn.send(request)
+      request = {"message": ABORT, "transaction_number": self.transaction_number}
+      self.conn.send(request)
       print(f'{self.transaction_number} is aborted')
 
   def write(self, key: str, val: Any) -> None:
@@ -88,7 +86,7 @@ class TransactionExecutor():
       timeCheck = time()
       try:
         while(True):
-          sleep(0.1)
+          sleep(0.05)
           if(time() > timeCheck + TIME_LIMIT):
             assert False
           for message in self.messageQueue[self.transaction_number]:
@@ -112,7 +110,7 @@ class TransactionExecutor():
       timeCheck = time()
       try:
         while(True):
-          sleep(0.1)
+          sleep(0.05)
           if(time() > timeCheck + TIME_LIMIT):
             assert False
           for message in self.messageQueue[self.transaction_number]:

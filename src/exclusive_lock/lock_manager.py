@@ -1,7 +1,7 @@
 from typing import List, Dict
 from time import sleep
 from multiprocessing.connection import Connection
-from exclusive_lock.messages import ACQUIRE, RELEASE, TERMINATE
+from exclusive_lock.messages import ACQUIRE, RELEASE, TERMINATE, ABORT
 from utils.mutex import Mutex
 
 class LockManager():
@@ -31,12 +31,21 @@ class LockManager():
       response = {"message" : ACQUIRE, "transaction_number" : next_transaction_number, "resource_name": resource_name}
       self.conn.send(response)
 
+  def _cancel_pending(self, transaction_number: int) -> None:
+    for resource_name in self.lock_table:
+      for idx,elem in enumerate(self.lock_table[resource_name]):
+        if(idx==0):
+          if(elem==transaction_number):
+            self._release_lock(resource_name, transaction_number)
+        else:
+          if(elem==transaction_number):
+            self.lock_table[resource_name].remove(elem)
+
   def start(self) -> None:
     self.running = True
     while(self.running):
-      sleep(0.1)
+      sleep(0.05)
       request = self.conn.recv()
-
       if(request['message'] == TERMINATE):
         print("END LOCK MANAGER")
         print("===============")
@@ -51,3 +60,6 @@ class LockManager():
         assert 'resource_name' in request
         assert 'transaction_number' in request
         self._release_lock(request['resource_name'], request['transaction_number'])
+      elif(request['message'] == ABORT):
+        assert 'transaction_number' in request
+        self._cancel_pending(request['transaction_number'])

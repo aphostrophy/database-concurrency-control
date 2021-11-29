@@ -124,7 +124,7 @@ class TransactionExecutor():
         self.abort()
 
   def abort(self) -> None:
-    print(f'Timeout detected deadlock for transaction {self.transaction_number}')
+    print(f'Detected possible deadlock for transaction {self.transaction_number}')
     assert False
   
   def commit(self) -> None:

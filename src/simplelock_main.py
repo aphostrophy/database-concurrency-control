@@ -19,13 +19,13 @@ def main():
       tn.write(x, x_val+1)
     return txn
 
-  def transactionOneB(x= 'x', y= 'y', z= 'z') -> Transaction:
+  def transactionTwo(x= 'x', y= 'y', z= 'z') -> Transaction:
     def txn(tn:TransactionExecutor) -> None:
       y_val = tn.read(y)
       tn.write(y, y_val+1)
     return txn
 
-  def transactionTwo(x= 'x', y= 'y', z= 'z') -> Transaction:
+  def transactionThree(x= 'x', y= 'y', z= 'z') -> Transaction:
     def txn(tn:TransactionExecutor) -> None:
         x_val = tn.read(x)
         y_val = tn.read(y)
@@ -33,7 +33,7 @@ def main():
         tn.write(y, y_val+3)
     return txn
 
-  def transactionThree(x= 'x', y= 'y', z='z') -> Transaction:
+  def transactionFour(x= 'x', y= 'y', z='z') -> Transaction:
     def txn(tn:TransactionExecutor) -> None:
       z_val = tn.read(z)
       y_val = tn.read(y)
@@ -64,14 +64,14 @@ def main():
   lock_manager_process.start()
 
   t_1 = transactionOne()
-  t_1_B = transactionOneB()
-  t_2 = transactionTwo()
+  t_2= transactionTwo()
   t_3 = transactionThree()
+  t_4 = transactionFour()
 
   txn_processor.enqueue_transaction(t_1)
-  txn_processor.enqueue_transaction(t_1_B)
   txn_processor.enqueue_transaction(t_2)
   txn_processor.enqueue_transaction(t_3)
+  txn_processor.enqueue_transaction(t_4)
   txn_processor.start()
 
 if __name__ == '__main__':

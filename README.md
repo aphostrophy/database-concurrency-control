@@ -105,7 +105,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@jessonyo](https://twitter.com/your_username) - aphostrophy@gmail.com
+Your Name - [@jessonyo](https://www.linkedin.com/in/jesson-yo/) - aphostrophy@gmail.com
 
 Project Link: [https://github.com/aphostrophy/database-concurrency-control](https://github.com/aphostrophy/database-concurrency-control)
 

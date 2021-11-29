@@ -9,12 +9,12 @@ class Database:
     self.data : Dict[str, Any] = {}
 
   def write(self, key: str, val: Any) -> None:
-    print(f'Thread {threading.get_ident()} is WRITING {key}:{val} to database')
+    print(f'Thread {threading.get_ident()} WRITE {key}')
     self.data[key] = val
 
   def read(self, key: str) -> Any:
     assert key in self.data
-    print(f'Thread {threading.get_ident()} is READING {key}:{self.data[key]} from database')
+    print(f'Thread {threading.get_ident()} READ {key}')
     return self.data[key]
 
   def delete(self, key: str) -> None:
@@ -30,11 +30,11 @@ class CacheDatabase:
 
   def _read(self, key: str) -> Any:
     assert key in self.data
-    print(f'Thread {threading.get_ident()} is READING {key}:{self.data[key]} from cache database')
+    print(f'Thread {threading.get_ident()} READ {key} CACHE')
     return self.data[key]
 
   def _write(self, key: str, val: Any) -> None:
-    print(f'Thread {threading.get_ident()} is WRITING {key}:{val} to cache database')
+    print(f'Thread {threading.get_ident()} WRITE {key} CACHE')
     self.data[key] = val
 
   def _data(self) -> Dict[str, Any]:

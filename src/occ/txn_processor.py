@@ -58,13 +58,13 @@ class SerialTransactionExecutor:
         cached_db = self.db._get_transaction(ts)
         write_set_j = cached_db.get_write_set()
         if not write_set_j.isdisjoint(read_set_j):
-          print(f'Thread {get_ident()} is ROLLED BACK {write_set_j.intersection(read_set_j)}')
+          print(f'Thread {get_ident()} is ROLLED BACK INTERSECT {write_set_j.intersection(read_set_j)}')
           return False
       except AssertionError:
         pass
 
     self.db._commit_transaction(self.cached_db)
-    print(f'Thread {get_ident()} is COMMITING')
+    print(f'Thread {get_ident()} COMMIT')
     return True
 
 

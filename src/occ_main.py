@@ -16,13 +16,13 @@ def main():
       db.write(x, x_val+1)
     return txn
 
-  def transactionOneA(x= 'x', y= 'y', z= 'z') -> Transaction:
+  def transactionTwo(x= 'x', y= 'y', z= 'z') -> Transaction:
     def txn(db: DatabaseCacheExecutorWrapper) -> None:
       z_val = db.read(z)
       db.write(z, z_val+1)
     return txn
 
-  def transactionTwo(x= 'x', y= 'y', z= 'z') -> Transaction:
+  def transactionThree(x= 'x', y= 'y', z= 'z') -> Transaction:
     def txn(db: DatabaseCacheExecutorWrapper) -> None:
       x_val = db.read(x)
       y_val = db.read(y)
@@ -30,7 +30,7 @@ def main():
       db.write(y, y_val+3)
     return txn
 
-  def transactionThree(x= 'x', y= 'y', z= 'z') -> Transaction:
+  def transactionFour(x= 'x', y= 'y', z= 'z') -> Transaction:
     def txn(db: DatabaseCacheExecutorWrapper) -> None:
       x_val = db.read(x)
       y_val = db.read(y)
@@ -52,21 +52,23 @@ def main():
 
   ''' END OF INIT DB'''
 
+  print("================")
+
   t_1 = transactionOne()
-  t_1_A = transactionOneA()
-  t_2 = transactionTwo()
-
-  processor.enqueue_transaction(t_1)
-  processor.enqueue_transaction(t_2)
-  processor.enqueue_transaction(t_1_A)
-
-  processor.execute()
-  print(db.data)
-
+  t_2= transactionTwo()
   t_3 = transactionThree()
+  t_4 = transactionFour()
+
+  processor.enqueue_transaction(t_2)
   processor.enqueue_transaction(t_3)
+
   processor.execute()
-  print(db.data)
+
+  print("===============")
+
+  processor.enqueue_transaction(t_3)
+  processor.enqueue_transaction(t_4)
+  processor.execute()
 
 if __name__ == '__main__':
   main()

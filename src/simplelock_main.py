@@ -71,7 +71,7 @@ def main():
   txn_processor.enqueue_transaction(t_1)
   txn_processor.enqueue_transaction(t_2)
   txn_processor.enqueue_transaction(t_3)
-  txn_processor.enqueue_transaction(t_4)
+  # txn_processor.enqueue_transaction(t_4)
   txn_processor.start()
 
 if __name__ == '__main__':
